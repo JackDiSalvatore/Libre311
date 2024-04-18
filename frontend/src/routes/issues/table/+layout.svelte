@@ -3,16 +3,14 @@
 </script>
 
 <script lang="ts">
-	import messages from '$media/messages.json';
 	import SideBarMainContentLayout from '$lib/components/SideBarMainContentLayout.svelte';
-	import { Button, Card, DatePicker, Input, Table } from 'stwui';
+	import { Button, Card, Table } from 'stwui';
 	import { page } from '$app/stores';
 	import { useLibre311Context, useLibre311Service } from '$lib/context/Libre311Context';
 	import {
 		useSelectedServiceRequestStore,
 		useServiceRequestsContext
 	} from '$lib/context/ServiceRequestsContext';
-	import Pagination from '$lib/components/Pagination.svelte';
 	import { goto } from '$app/navigation';
 	import { saveAs } from 'file-saver';
 	import { arrowDownTray } from '$lib/components/Svg/outline/arrowDownTray';
@@ -23,28 +21,19 @@
 		type ServiceRequestPriority,
 		type ServiceRequestStatus
 	} from '$lib/services/Libre311/Libre311';
-	import {
-		serviceRequestPrioritySelectOptions,
-		serviceRequestStatusSelectOptions,
-		toAbbreviatedTimeStamp
-	} from '$lib/utils/functions';
+	import { toAbbreviatedTimeStamp } from '$lib/utils/functions';
 	import type { Maybe } from '$lib/utils/types';
-	import { magnifingGlassIcon } from '$lib/components/Svg/outline/magnifyingGlassIcon';
 	import { onMount } from 'svelte';
-	import Funnel from '$lib/components/Svg/outline/Funnel.svelte';
-	import { slide } from 'svelte/transition';
-	import { Select } from 'stwui';
 	import { columns } from './table';
-	import { calendarIcon } from '$lib/components/Svg/outline/calendarIcon';
 	import {
 		ASYNC_IN_PROGRESS,
 		asAsyncSuccess,
 		type AsyncResult,
 		asAsyncFailure
 	} from '$lib/services/http';
-	import type { SelectOption } from 'stwui/types';
 	import ServiceRequestStatusBadge from '$lib/components/ServiceRequestStatusBadge.svelte';
 	import { FilteredServiceRequestsParamsMapper } from '$lib/services/Libre311/FilteredServiceRequestsParamsMapper';
+	import ServiceRequestHeader from '$lib/components/ServiceRequestHeader.svelte';
 
 	const linkResolver = useLibre311Context().linkResolver;
 	const selectedServiceRequestStore = useSelectedServiceRequestStore();
@@ -55,7 +44,6 @@
 	let serviceList: AsyncResult<GetServiceListResponse> = ASYNC_IN_PROGRESS;
 	let selectedServicePriority: ServiceRequestPriority[];
 	let selectedServiceCodes: string[] | undefined;
-	let isSearchFiltersOpen: boolean = false;
 	let statusInput: ServiceRequestStatus[];
 	let orderBy: string;
 	let startDate: Date;
@@ -89,34 +77,12 @@
 			.catch((err) => (serviceList = asAsyncFailure(err)));
 	}
 
-	function createSelectOptions(res: GetServiceListResponse): SelectOption[] {
-		return res.map((s) => ({ value: s.service_code, label: s.service_name }));
-	}
-
-	async function handleSearchInput(e: Event) {
-		const target = e.target as HTMLInputElement;
-
-		// Remove non-numeric characters from the input value
-		let sanitizedValue = target.value.replace(/\D/g, '');
-
-		if (sanitizedValue) {
-			const serviceRequestId = Number(sanitizedValue);
-			ctx.applyServiceRequestParams([serviceRequestId], $page.url);
-		} else {
-			ctx.applyServiceRequestParams({}, $page.url);
-		}
-	}
-
 	async function handleDownloadCsv() {
 		const serviceRequestsBlob = await libre311.downloadServiceRequests(
 			FilteredServiceRequestsParamsMapper.toRequestParams($page.url.searchParams)
 		);
 
 		saveAs(serviceRequestsBlob, 'service-requests.csv');
-	}
-
-	async function handleFunnelClick() {
-		isSearchFiltersOpen = !isSearchFiltersOpen;
 	}
 
 	async function handleFilterInput(
@@ -150,117 +116,11 @@
 </script>
 
 {#if $serviceRequestsRes.type === 'success'}
+	<ServiceRequestHeader />
+
 	<SideBarMainContentLayout>
 		<slot slot="side-bar" />
 		<div slot="main-content" class="relative flex h-full flex-col">
-			<div class="m-3 flex items-center justify-between">
-				<div>
-					<p class="text-base">{messages['sidebar']['title']}</p>
-				</div>
-
-				<div>
-					<Pagination
-						pagination={$serviceRequestsRes.value.metadata.pagination}
-						nextPage={linkResolver.nextIssuesTablePage(
-							$serviceRequestsRes.value.metadata.pagination,
-							$page.url
-						)}
-						prevPage={linkResolver.prevIssuesTablePage(
-							$serviceRequestsRes.value.metadata.pagination,
-							$page.url
-						)}
-					/>
-				</div>
-			</div>
-
-			<div
-				class="m-3 flex items-center justify-end rounded-md border-t-[1px] border-border shadow-md"
-			>
-				<div class="m-3 flex items-center">
-					{#if !isSearchFiltersOpen}
-						<div transition:slide|local={{ duration: 500 }}>
-							<Input slot="extra" placeholder="#Request ID" on:change={handleSearchInput}>
-								<Input.Leading slot="trailing" data={magnifingGlassIcon} />
-							</Input>
-						</div>
-					{:else}
-						<div class="flex flex-wrap justify-end" transition:slide|local={{ duration: 500 }}>
-							<div class="m-1">
-								<Select
-									bind:value={selectedServicePriority}
-									name="select-priority"
-									placeholder="Priority:"
-									multiple
-									options={serviceRequestPrioritySelectOptions}
-								>
-									<Select.Label slot="label">Priority</Select.Label>
-									<Select.Options slot="options">
-										{#each serviceRequestPrioritySelectOptions as option}
-											<Select.Options.Option {option} />
-										{/each}
-									</Select.Options>
-								</Select>
-							</div>
-
-							<div class="m-1">
-								<Select
-									name="select-status"
-									placeholder="Status:"
-									multiple
-									options={serviceRequestStatusSelectOptions}
-									bind:value={statusInput}
-								>
-									<Select.Label slot="label">Status</Select.Label>
-									<Select.Options slot="options">
-										{#each serviceRequestStatusSelectOptions as option}
-											<Select.Options.Option {option} />
-										{/each}
-									</Select.Options>
-								</Select>
-							</div>
-
-							{#if serviceList.type === 'success'}
-								{@const selectOptions = createSelectOptions(serviceList.value)}
-								<div class="m-1 min-w-52">
-									<Select
-										bind:value={selectedServiceCodes}
-										name="select-1"
-										placeholder="Request Type"
-										multiple
-										options={selectOptions}
-									>
-										<Select.Label slot="label">Service</Select.Label>
-										<Select.Options slot="options">
-											{#each selectOptions as option}
-												<Select.Options.Option {option} />
-											{/each}
-										</Select.Options>
-									</Select>
-								</div>
-							{/if}
-
-							<div class="m-1">
-								<DatePicker name="start-datetime" allowClear bind:value={startDate}>
-									<DatePicker.Label slot="label">Reported From</DatePicker.Label>
-									<DatePicker.Leading slot="leading" data={calendarIcon} />
-								</DatePicker>
-							</div>
-
-							<div class="m-1">
-								<DatePicker name="end-datetime" allowClear bind:value={endDate}>
-									<DatePicker.Label slot="label">Reported To</DatePicker.Label>
-									<DatePicker.Leading slot="leading" data={calendarIcon} />
-								</DatePicker>
-							</div>
-						</div>
-					{/if}
-				</div>
-
-				<button class="mr-3" on:click={handleFunnelClick}>
-					<Funnel />
-				</button>
-			</div>
-
 			<Card bordered={true} class="m-2">
 				<Card.Content slot="content" class="p-0 sm:p-0">
 					<div class="issues-table-override">

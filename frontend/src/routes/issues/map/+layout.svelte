@@ -25,6 +25,7 @@
 	import { matchesDesktopMedia } from '$lib/utils/functions';
 	import CreateServiceRequestButton from '$lib/components/CreateServiceRequestButton.svelte';
 	import { mapCenterControlFactory } from '$lib/components/MapCenterControl';
+	import ServiceRequestHeader from '$lib/components/ServiceRequestHeader.svelte';
 
 	const linkResolver = useLibre311Context().linkResolver;
 	const libre311 = useLibre311Context().service;
@@ -59,6 +60,8 @@
 		}
 	}
 </script>
+
+<ServiceRequestHeader />
 
 <SideBarMainContentLayout>
 	<slot slot="side-bar" />
