@@ -116,9 +116,8 @@
 </script>
 
 {#if $serviceRequestsRes.type === 'success'}
-	<ServiceRequestHeader />
-
 	<SideBarMainContentLayout>
+		<ServiceRequestHeader slot="header-content" />
 		<slot slot="side-bar" />
 		<div slot="main-content" class="relative flex h-full flex-col">
 			<Card bordered={true} class="m-2">

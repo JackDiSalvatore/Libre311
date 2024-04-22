@@ -61,9 +61,8 @@
 	}
 </script>
 
-<ServiceRequestHeader />
-
 <SideBarMainContentLayout>
+	<ServiceRequestHeader slot="header-content" />
 	<slot slot="side-bar" />
 	<div slot="main-content" class="relative flex h-full">
 		<Breakpoint>
