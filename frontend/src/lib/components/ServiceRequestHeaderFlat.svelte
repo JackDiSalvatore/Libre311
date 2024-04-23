@@ -29,6 +29,7 @@
 		serviceRequestStatusSelectOptions
 	} from '$lib/utils/functions';
 	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
 
 	const libre311 = useLibre311Service();
 	const linkResolver = useLibre311Context().linkResolver;
@@ -133,13 +134,13 @@
 
 		<div class="mx-2 flex items-center">
 			{#if !isSearchFiltersOpen}
-				<div>
+				<div transition:slide|local={{ duration: 500 }}>
 					<Input slot="extra" placeholder="#Request ID" on:change={handleSearchInput}>
 						<Input.Leading slot="trailing" data={magnifingGlassIcon} />
 					</Input>
 				</div>
 			{:else}
-				<div class="flex flex-wrap justify-end">
+				<div class="flex flex-wrap justify-end" transition:slide|local={{ duration: 500 }}>
 					<div class="m-1">
 						<Select
 							bind:value={selectedServicePriority}
