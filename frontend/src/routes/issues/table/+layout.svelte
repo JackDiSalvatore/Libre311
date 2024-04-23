@@ -89,7 +89,6 @@
 
 {#if $serviceRequestsRes.type === 'success'}
 	<SideBarMainContentLayout>
-		<!-- <ServiceRequestHeaderDropdown slot="header-content" /> -->
 		<ServiceRequestHeaderFlat slot="header-content" />
 
 		<slot slot="side-bar" />

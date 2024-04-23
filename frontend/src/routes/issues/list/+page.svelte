@@ -1,7 +1,5 @@
 <script lang="ts">
-	import messages from '$media/messages.json';
 	import ServiceRequestPreview from '$lib/components/ServiceRequestPreview.svelte';
-	import Pagination from '$lib/components/Pagination.svelte';
 	import { page } from '$app/stores';
 	import { useServiceRequestsContext } from '$lib/context/ServiceRequestsContext';
 	import { useLibre311Context } from '$lib/context/Libre311Context';
@@ -14,22 +12,18 @@
 	const linkResolver = useLibre311Context().linkResolver;
 
 	let listElement: HTMLElement;
-
-	function scrollToTop() {
-		listElement.scrollIntoView();
-	}
 </script>
 
 <div class="flex items-center justify-center">
 	<div class="w-full max-w-lg">
+		<ServiceRequestHeaderDropdown />
+
 		<div class="my-4 flex justify-center">
 			<MapListToggle />
 		</div>
 
 		{#if $serviceRequestsRes.type === 'success'}
 			<div bind:this={listElement}>
-				<ServiceRequestHeaderDropdown />
-
 				<ul>
 					{#each $serviceRequestsRes.value.serviceRequests as serviceRequest}
 						<li class="m-3">

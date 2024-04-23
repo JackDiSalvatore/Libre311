@@ -120,11 +120,11 @@
 			<div>
 				<Pagination
 					pagination={$serviceRequestsRes.value.metadata.pagination}
-					nextPage={linkResolver.nextIssuesTablePage(
+					nextPage={linkResolver.nextIssuesPage(
 						$serviceRequestsRes.value.metadata.pagination,
 						$page.url
 					)}
-					prevPage={linkResolver.prevIssuesTablePage(
+					prevPage={linkResolver.prevIssuesPage(
 						$serviceRequestsRes.value.metadata.pagination,
 						$page.url
 					)}
