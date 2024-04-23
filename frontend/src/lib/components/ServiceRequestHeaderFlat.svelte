@@ -148,7 +148,7 @@
 							multiple
 							options={serviceRequestPrioritySelectOptions}
 						>
-							<Select.Label slot="label">Priority</Select.Label>
+							<Select.Label class="text-left" slot="label">Priority</Select.Label>
 							<Select.Options slot="options">
 								{#each serviceRequestPrioritySelectOptions as option}
 									<Select.Options.Option {option} />
@@ -165,7 +165,7 @@
 							options={serviceRequestStatusSelectOptions}
 							bind:value={statusInput}
 						>
-							<Select.Label slot="label">Status</Select.Label>
+							<Select.Label class="text-left" slot="label">Status</Select.Label>
 							<Select.Options slot="options">
 								{#each serviceRequestStatusSelectOptions as option}
 									<Select.Options.Option {option} />
@@ -184,7 +184,7 @@
 								multiple
 								options={selectOptions}
 							>
-								<Select.Label slot="label">Service</Select.Label>
+								<Select.Label class="text-left" slot="label">Service</Select.Label>
 								<Select.Options slot="options">
 									{#each selectOptions as option}
 										<Select.Options.Option {option} />
@@ -196,14 +196,14 @@
 
 					<div class="m-1">
 						<DatePicker name="start-datetime" allowClear bind:value={startDate}>
-							<DatePicker.Label slot="label">Reported From</DatePicker.Label>
+							<DatePicker.Label class="text-left" slot="label">Reported From</DatePicker.Label>
 							<DatePicker.Leading slot="leading" data={calendarIcon} />
 						</DatePicker>
 					</div>
 
 					<div class="m-1">
 						<DatePicker name="end-datetime" allowClear bind:value={endDate}>
-							<DatePicker.Label slot="label">Reported To</DatePicker.Label>
+							<DatePicker.Label class="text-left" slot="label">Reported To</DatePicker.Label>
 							<DatePicker.Leading slot="leading" data={calendarIcon} />
 						</DatePicker>
 					</div>

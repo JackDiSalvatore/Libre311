@@ -22,6 +22,7 @@
 	import ServiceRequestStatusBadge from '$lib/components/ServiceRequestStatusBadge.svelte';
 	import { FilteredServiceRequestsParamsMapper } from '$lib/services/Libre311/FilteredServiceRequestsParamsMapper';
 	import ServiceRequestHeaderDropdown from '$lib/components/ServiceRequestHeaderDropdown.svelte';
+	import ServiceRequestHeaderFlat from '$lib/components/ServiceRequestHeaderFlat.svelte';
 
 	const linkResolver = useLibre311Context().linkResolver;
 	const selectedServiceRequestStore = useSelectedServiceRequestStore();
@@ -88,7 +89,9 @@
 
 {#if $serviceRequestsRes.type === 'success'}
 	<SideBarMainContentLayout>
-		<ServiceRequestHeaderDropdown slot="header-content" />
+		<!-- <ServiceRequestHeaderDropdown slot="header-content" /> -->
+		<ServiceRequestHeaderFlat slot="header-content" />
+
 		<slot slot="side-bar" />
 		<div slot="main-content" class="relative flex h-full flex-col">
 			<Card bordered={true} class="m-2">

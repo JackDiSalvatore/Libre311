@@ -6,6 +6,7 @@
 	import { useServiceRequestsContext } from '$lib/context/ServiceRequestsContext';
 	import { useLibre311Context } from '$lib/context/Libre311Context';
 	import MapListToggle from '$lib/components/MapListToggle.svelte';
+	import ServiceRequestHeaderDropdown from '$lib/components/ServiceRequestHeaderDropdown.svelte';
 
 	const ctx = useServiceRequestsContext();
 	const serviceRequestsRes = ctx.serviceRequestsResponse;
@@ -27,28 +28,7 @@
 
 		{#if $serviceRequestsRes.type === 'success'}
 			<div bind:this={listElement}>
-				<div class="sticky top-0 border-b-2 bg-white">
-					<div class="m-3 flex items-center justify-between">
-						<div>
-							<p class="text-base">{messages['sidebar']['title']}</p>
-						</div>
-
-						<div>
-							<Pagination
-								pagination={$serviceRequestsRes.value.metadata.pagination}
-								nextPage={linkResolver.nextIssuesPage(
-									$serviceRequestsRes.value.metadata.pagination,
-									$page.url
-								)}
-								prevPage={linkResolver.prevIssuesPage(
-									$serviceRequestsRes.value.metadata.pagination,
-									$page.url
-								)}
-								on:pageChange={scrollToTop}
-							/>
-						</div>
-					</div>
-				</div>
+				<ServiceRequestHeaderDropdown />
 
 				<ul>
 					{#each $serviceRequestsRes.value.serviceRequests as serviceRequest}
