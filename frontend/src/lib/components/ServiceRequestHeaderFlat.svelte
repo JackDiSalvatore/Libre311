@@ -111,7 +111,7 @@
 
 {#if $serviceRequestsRes.type === 'success'}
 	<div class="mx-2 flex items-center justify-between">
-		<div class="mx-2 flex items-center justify-between">
+		<div class="mx-2 flex items-center justify-between min-w-96">
 			<div class="mr-4">
 				<h3 class="text-base">{messages['sidebar']['title']}</h3>
 			</div>
