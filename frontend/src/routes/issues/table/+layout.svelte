@@ -1,7 +1,3 @@
-<script lang="ts" context="module">
-	let cachedServiceList: GetServiceListResponse | undefined = undefined;
-</script>
-
 <script lang="ts">
 	import SideBarMainContentLayout from '$lib/components/SideBarMainContentLayout.svelte';
 	import { Button, Card, Table } from 'stwui';
@@ -23,14 +19,7 @@
 	} from '$lib/services/Libre311/Libre311';
 	import { toAbbreviatedTimeStamp } from '$lib/utils/functions';
 	import type { Maybe } from '$lib/utils/types';
-	import { onMount } from 'svelte';
 	import { columns } from './table';
-	import {
-		ASYNC_IN_PROGRESS,
-		asAsyncSuccess,
-		type AsyncResult,
-		asAsyncFailure
-	} from '$lib/services/http';
 	import ServiceRequestStatusBadge from '$lib/components/ServiceRequestStatusBadge.svelte';
 	import { FilteredServiceRequestsParamsMapper } from '$lib/services/Libre311/FilteredServiceRequestsParamsMapper';
 	import ServiceRequestHeader from '$lib/components/ServiceRequestHeader.svelte';
@@ -41,7 +30,6 @@
 	const libre311 = useLibre311Service();
 	const serviceRequestsRes = ctx.serviceRequestsResponse;
 
-	let serviceList: AsyncResult<GetServiceListResponse> = ASYNC_IN_PROGRESS;
 	let selectedServicePriority: ServiceRequestPriority[];
 	let selectedServiceCodes: string[] | undefined;
 	let statusInput: ServiceRequestStatus[];
@@ -61,20 +49,6 @@
 		return serviceRequest.service_request_id === selectedServiceRequest?.service_request_id
 			? 'selected'
 			: 'item-id';
-	}
-
-	function fetchServiceList() {
-		if (cachedServiceList) {
-			serviceList = asAsyncSuccess(cachedServiceList);
-			return;
-		}
-		libre311
-			.getServiceList()
-			.then((res) => {
-				cachedServiceList = res;
-				serviceList = asAsyncSuccess(res);
-			})
-			.catch((err) => (serviceList = asAsyncFailure(err)));
 	}
 
 	async function handleDownloadCsv() {
@@ -103,8 +77,6 @@
 			$page.url
 		);
 	}
-
-	onMount(fetchServiceList);
 
 	$: handleFilterInput(
 		selectedServicePriority,

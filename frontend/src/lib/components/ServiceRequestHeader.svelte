@@ -1,3 +1,7 @@
+<script lang="ts" context="module">
+	let cachedServiceList: GetServiceListResponse | undefined = undefined;
+</script>
+
 <script lang="ts">
 	import messages from '$media/messages.json';
 	import Funnel from './Svg/outline/Funnel.svelte';
@@ -10,16 +14,23 @@
 		type ServiceRequestPriority,
 		type ServiceRequestStatus
 	} from '$lib/services/Libre311/Libre311';
-	import { ASYNC_IN_PROGRESS, type AsyncResult } from '$lib/services/http';
+	import {
+		ASYNC_IN_PROGRESS,
+		asAsyncSuccess,
+		type AsyncResult,
+		asAsyncFailure
+	} from '$lib/services/http';
 	import type { SelectOption } from 'stwui/types';
-	import { useLibre311Context } from '$lib/context/Libre311Context';
+	import { useLibre311Context, useLibre311Service } from '$lib/context/Libre311Context';
 	import { useServiceRequestsContext } from '$lib/context/ServiceRequestsContext';
 	import { page } from '$app/stores';
 	import {
 		serviceRequestPrioritySelectOptions,
 		serviceRequestStatusSelectOptions
 	} from '$lib/utils/functions';
+	import { onMount } from 'svelte';
 
+	const libre311 = useLibre311Service();
 	const linkResolver = useLibre311Context().linkResolver;
 	const ctx = useServiceRequestsContext();
 	const serviceRequestsRes = ctx.serviceRequestsResponse;
@@ -53,6 +64,49 @@
 			ctx.applyServiceRequestParams({}, $page.url);
 		}
 	}
+
+	function fetchServiceList() {
+		if (cachedServiceList) {
+			serviceList = asAsyncSuccess(cachedServiceList);
+			return;
+		}
+		libre311
+			.getServiceList()
+			.then((res) => {
+				cachedServiceList = res;
+				serviceList = asAsyncSuccess(res);
+			})
+			.catch((err) => (serviceList = asAsyncFailure(err)));
+	}
+
+	async function handleFilterInput(
+		selectedServicePriority: ServiceRequestPriority[],
+		selectedServiceCodes: string[] | undefined,
+		statusInput: ServiceRequestStatus[],
+		startDate: Date,
+		endDate: Date
+	) {
+		ctx.applyServiceRequestParams(
+			{
+				servicePriority: selectedServicePriority,
+				serviceCode: selectedServiceCodes?.map((s) => Number(s)),
+				status: statusInput,
+				startDate: startDate?.toISOString(),
+				endDate: endDate?.toISOString()
+			},
+			$page.url
+		);
+	}
+
+	onMount(fetchServiceList);
+
+	$: handleFilterInput(
+		selectedServicePriority,
+		selectedServiceCodes,
+		statusInput,
+		startDate,
+		endDate
+	);
 </script>
 
 {#if $serviceRequestsRes.type === 'success'}
@@ -161,4 +215,6 @@
 			</button>
 		</div>
 	</div>
+{:else}
+	{'loading...'}
 {/if}

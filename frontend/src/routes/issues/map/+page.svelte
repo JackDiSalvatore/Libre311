@@ -1,8 +1,6 @@
 <script lang="ts">
-	import messages from '$media/messages.json';
 	import ServiceRequestPreview from '$lib/components/ServiceRequestPreview.svelte';
 
-	import Pagination from '$lib/components/Pagination.svelte';
 	import { useLibre311Context } from '$lib/context/Libre311Context';
 	import { page } from '$app/stores';
 	import { useServiceRequestsContext } from '$lib/context/ServiceRequestsContext';
@@ -13,10 +11,6 @@
 	const linkResolver = useLibre311Context().linkResolver;
 
 	let listElement: HTMLElement;
-
-	function scrollToTop() {
-		listElement.scrollIntoView();
-	}
 </script>
 
 {#if $serviceRequestsRes.type === 'success'}
