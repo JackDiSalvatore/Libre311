@@ -11,7 +11,6 @@
 	import { saveAs } from 'file-saver';
 	import { arrowDownTray } from '$lib/components/Svg/outline/arrowDownTray';
 	import {
-		type GetServiceListResponse,
 		type ServiceRequest,
 		type ServiceRequestId,
 		type ServiceRequestPriority,
@@ -22,7 +21,7 @@
 	import { columns } from './table';
 	import ServiceRequestStatusBadge from '$lib/components/ServiceRequestStatusBadge.svelte';
 	import { FilteredServiceRequestsParamsMapper } from '$lib/services/Libre311/FilteredServiceRequestsParamsMapper';
-	import ServiceRequestHeader from '$lib/components/ServiceRequestHeader.svelte';
+	import ServiceRequestHeaderDropdown from '$lib/components/ServiceRequestHeaderDropdown.svelte';
 
 	const linkResolver = useLibre311Context().linkResolver;
 	const selectedServiceRequestStore = useSelectedServiceRequestStore();
@@ -89,7 +88,7 @@
 
 {#if $serviceRequestsRes.type === 'success'}
 	<SideBarMainContentLayout>
-		<ServiceRequestHeader slot="header-content" />
+		<ServiceRequestHeaderDropdown slot="header-content" />
 		<slot slot="side-bar" />
 		<div slot="main-content" class="relative flex h-full flex-col">
 			<Card bordered={true} class="m-2">
