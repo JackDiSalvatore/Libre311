@@ -211,7 +211,6 @@
 							name="start-datetime"
 							allowClear
 							bind:value={startDate}
-							id="date-picker-override"
 						>
 							<DatePicker.Label class="text-left" slot="label">Reported From</DatePicker.Label>
 							<DatePicker.Leading slot="leading" data={calendarIcon} />
@@ -237,9 +236,5 @@
 		height: 450px;
 		min-height: 450px;
 		min-width: 350px;
-	}
-
-	:global(#date-picker-override) {
-		z-index: 100;
 	}
 </style>

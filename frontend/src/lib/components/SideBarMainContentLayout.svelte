@@ -24,14 +24,15 @@
 	}
 
 	.header-content {
-		height: 10%;
-		padding: 10px 0;
 		text-align: center;
+		min-height: 30px;
 	}
 
 	.split-layout-container {
-		grid-template-columns: 100%;
-		height: 90%;
+		/* grid-template-columns: 100%; */
+		--header-height: 6rem;
+		/* border: 1px solid hsl(var(--primary)); */
+		height: calc(100dvh - var(--header-height));
 	}
 
 	.main-content {
