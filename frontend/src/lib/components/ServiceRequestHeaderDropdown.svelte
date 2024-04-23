@@ -133,9 +133,9 @@
 		</div>
 
 		<div class="mx-2 flex items-center">
-			<Input placeholder="Request ID" on:change={handleSearchInput}>
+			<!-- <Input placeholder="Request ID" on:change={handleSearchInput}>
 				<Input.Trailing slot="trailing" data={magnifingGlassIcon} />
-			</Input>
+			</Input> -->
 
 			<Dropdown bind:visible={isDropDownVisable}>
 				<Button slot="trigger" type="ghost" on:click={toggleDropdown}>
