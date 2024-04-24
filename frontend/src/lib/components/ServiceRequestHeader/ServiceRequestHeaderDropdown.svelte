@@ -4,9 +4,9 @@
 
 <script lang="ts">
 	import messages from '$media/messages.json';
-	import Funnel from './Svg/outline/Funnel.svelte';
-	import { magnifingGlassIcon } from './Svg/outline/magnifyingGlassIcon';
-	import { calendarIcon } from './Svg/outline/calendarIcon';
+	import Funnel from '../Svg/outline/Funnel.svelte';
+	import { magnifingGlassIcon } from '../Svg/outline/magnifyingGlassIcon';
+	import { calendarIcon } from '../Svg/outline/calendarIcon';
 	import { Button, DatePicker, Dropdown, Input, Select } from 'stwui';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import {
@@ -133,12 +133,14 @@
 		</div>
 
 		<div class="mx-2 flex items-center">
-			<!-- <Input placeholder="Request ID" on:change={handleSearchInput}>
-				<Input.Trailing slot="trailing" data={magnifingGlassIcon} />
-			</Input> -->
+			<div class="align-middle">
+				<Input class="rounded-md my-1" placeholder="Request ID" on:change={handleSearchInput} >
+					<Input.Leading slot="trailing" data={magnifingGlassIcon} />
+				</Input>
+			</div>
 
 			<Dropdown bind:visible={isDropDownVisable}>
-				<Button slot="trigger" type="ghost" on:click={toggleDropdown}>
+				<Button class="mx-3" type="ghost" slot="trigger" on:click={toggleDropdown}>
 					<Funnel slot="icon" />
 				</Button>
 

@@ -25,7 +25,7 @@
 	import { matchesDesktopMedia } from '$lib/utils/functions';
 	import CreateServiceRequestButton from '$lib/components/CreateServiceRequestButton.svelte';
 	import { mapCenterControlFactory } from '$lib/components/MapCenterControl';
-	import ServiceRequestHeaderFlat from '$lib/components/ServiceRequestHeaderFlat.svelte';
+	import { ServiceRequestHeaderFlat } from '$lib/components/ServiceRequestHeader/ServiceRequestHeader';
 
 	const linkResolver = useLibre311Context().linkResolver;
 	const libre311 = useLibre311Context().service;

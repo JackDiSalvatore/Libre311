@@ -4,10 +4,10 @@
 
 <script lang="ts">
 	import messages from '$media/messages.json';
-	import Funnel from './Svg/outline/Funnel.svelte';
-	import { magnifingGlassIcon } from './Svg/outline/magnifyingGlassIcon';
-	import { calendarIcon } from './Svg/outline/calendarIcon';
-	import { DatePicker, Input, Select } from 'stwui';
+	import Funnel from '../Svg/outline/Funnel.svelte';
+	import { magnifingGlassIcon } from '../Svg/outline/magnifyingGlassIcon';
+	import { calendarIcon } from '../Svg/outline/calendarIcon';
+	import { Button, DatePicker, Input, Select } from 'stwui';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import {
 		type GetServiceListResponse,
@@ -134,8 +134,8 @@
 
 		<div class="mx-2 flex items-center">
 			{#if !isSearchFiltersOpen}
-				<div transition:slide|local={{ duration: 500 }}>
-					<Input slot="extra" placeholder="#Request ID" on:change={handleSearchInput}>
+				<div class="align-middle" transition:slide|local={{ duration: 500 }}>
+					<Input class="rounded-md my-1" placeholder="Request ID" on:change={handleSearchInput} >
 						<Input.Leading slot="trailing" data={magnifingGlassIcon} />
 					</Input>
 				</div>
@@ -211,9 +211,9 @@
 				</div>
 			{/if}
 
-			<button class="mx-3" on:click={handleFunnelClick}>
-				<Funnel />
-			</button>
+			<Button class="mx-3" type="ghost" on:click={handleFunnelClick}>
+				<Funnel slot="icon" />
+			</Button>
 		</div>
 	</div>
 {:else}

@@ -4,7 +4,7 @@
 	import { useServiceRequestsContext } from '$lib/context/ServiceRequestsContext';
 	import { useLibre311Context } from '$lib/context/Libre311Context';
 	import MapListToggle from '$lib/components/MapListToggle.svelte';
-	import ServiceRequestHeaderDropdown from '$lib/components/ServiceRequestHeaderDropdown.svelte';
+	import { ServiceRequestHeaderDropdown } from '$lib/components/ServiceRequestHeader/ServiceRequestHeader';
 
 	const ctx = useServiceRequestsContext();
 	const serviceRequestsRes = ctx.serviceRequestsResponse;
@@ -14,9 +14,10 @@
 	let listElement: HTMLElement;
 </script>
 
+<ServiceRequestHeaderDropdown />
+
 <div class="flex items-center justify-center">
 	<div class="w-full max-w-lg">
-		<ServiceRequestHeaderDropdown />
 
 		<div class="my-4 flex justify-center">
 			<MapListToggle />
